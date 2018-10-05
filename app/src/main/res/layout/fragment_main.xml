@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgraund">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_maim_ll"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/search_edit"
+            style="@style/search_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="shrek"
+            android:hint="@string/search_movie"
+            android:padding="@dimen/search_edit_padding" />
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingHorizontal="10dp"
+            android:layout_marginVertical="@dimen/margin_button"
+            android:text="@string/search"
+            android:background="@drawable/selector_search"
+            style="@style/search_button"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_movie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
