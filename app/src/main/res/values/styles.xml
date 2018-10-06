@@ -31,5 +31,16 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="description">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 
 </resources>

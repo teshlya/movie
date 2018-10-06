@@ -7,14 +7,16 @@ import com.example.misha.movies.R;
 import com.example.misha.movies.model.MovieModel;
 import com.example.misha.movies.mvp.MainFragmentVP;
 
-import java.util.List;
 
-import data.MovieData;
+import data.ListMoviesData;
 
 public class MainFragmentPresenter implements MainFragmentVP.Presenter {
 
     private MainFragmentVP.View view;
     private final MovieModel model;
+    private String queryString;
+    private int queryPage;
+    private int totalPages;
 
     public MainFragmentPresenter(MovieModel model) {
         this.model = model;
@@ -30,21 +32,45 @@ public class MainFragmentPresenter implements MainFragmentVP.Presenter {
 
     @Override
     public void search() {
-        String query = view.getSearchQuery();
-        if (TextUtils.isEmpty(query)) {
+        String queryString = view.getSearchQuery();
+        if (TextUtils.isEmpty(queryString)) {
             view.showToast(R.string.empty_values);
             return;
         }
+        this.queryString = queryString;
+        this.queryPage = 1;
         view.showProgress();
-        model.searchMovies(query, new MovieModel.SearchMoviesCallback() {
+        model.searchMovies(new MovieModel.Query(queryString, queryPage), new MovieModel.SearchMoviesCallback() {
             @Override
-            public void onSearch(List<MovieData> movies) {
+            public void onSearch(ListMoviesData list) {
                 view.hideProgress();
-                if (movies == null) {
+                if (list.getMovies() == null) {
                     view.showToast(R.string.error_load_data);
                     return;
                 }
-                view.showMovies(movies);
+                totalPages = list.getTotalPages();
+                view.showMovies(list.getMovies());
+            }
+        });
+
+    }
+
+    @Override
+    public void loadMore() {
+       if (queryPage == totalPages) {
+            return;
+        }
+        view.showProgressList();
+        queryPage++;
+        model.searchMovies(new MovieModel.Query(queryString, queryPage), new MovieModel.SearchMoviesCallback() {
+            @Override
+            public void onSearch(ListMoviesData newMovies) {
+                if (newMovies == null) {
+                    view.showToast(R.string.error_load_data);
+                    return;
+                }
+                view.hideProgressList();
+                view.addMovies(newMovies.getMovies());
             }
         });
 

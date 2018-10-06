@@ -17,8 +17,8 @@ public class MainActivityPresenter implements MainActivityVP.Presenter, Fragment
     }
 
     @Override
-    public void openDetailFragment(MovieData movieData, BaseFragment fragment) {
-        view.addDetailFragment(movieData, fragment);
+    public void openDetailFragment(BaseFragment fragment) {
+        view.addDetailFragment(fragment);
     }
 
     @Override

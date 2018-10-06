@@ -1,10 +1,12 @@
-package com.example.misha.movies;
+package com.example.misha.movies.utils;
 
+import com.example.misha.movies.Constants;
 import com.example.misha.movies.api.APIService;
 
 import java.io.IOException;
 import java.util.List;
 
+import data.ListMoviesData;
 import data.MovieData;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -24,17 +26,16 @@ public class RetrofitClient {
         return retrofit.create(APIService.class);
     }
 
-    public List<MovieData> getMovies(String apiKey,
-                                     String query,
-                                     String language,
-                                     int page,
-                                     boolean include_adult){
-        List<MovieData> list = null;
+    public ListMoviesData getMovies(String apiKey,
+                                    String query,
+                                    String language,
+                                    int page,
+                                    boolean include_adult){
+        ListMoviesData list = null;
         try {
             list = getRetrofitClient().getMovies(apiKey, query, language, page, include_adult)
                     .execute()
-                    .body()
-                    .getMovies();
+                    .body();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -9,7 +9,7 @@ import com.example.misha.movies.presenters.MainActivityPresenter;
 
 import data.MovieData;
 
-public class MainActivity extends AppCompatActivity implements MainActivityVP.View{
+public class MainActivity extends AppCompatActivity implements MainActivityVP.View {
 
     private MainActivityPresenter presenter;
 
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityVP.Vi
         fragment.atachPresenter(presenter);
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container,fragment)
+                .add(R.id.fragment_container, fragment)
                 .commit();
     }
 
@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityVP.Vi
     public void addDetailFragment(BaseFragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container,fragment)
-                    .addToBackStack(null)
+                .add(R.id.fragment_container, fragment)
+                .addToBackStack(null)
                 .commit();
     }
 }
