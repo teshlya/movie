@@ -12,7 +12,7 @@ import com.example.misha.movies.R;
 import com.example.misha.movies.data.MovieData;
 import com.example.misha.movies.fragment.MovieDetailFragment;
 import com.example.misha.movies.mvp.FragmentNavigation;
-import com.example.misha.movies.utils.LoadImage;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +46,15 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
         this.movieData = movieData;
         titleTextView.setText(movieData.getTitle());
         if (movieData.getThumbnail() != null)
-            LoadImage.getInstance().load(Constants.BASE_URL_IMAGE + context.getResources().getString(R.string.image_size) + movieData.getThumbnail(), image);
+            Picasso.with(context)
+                    .load(getUrl(movieData.getThumbnail()))
+                    .into(image);
+    }
+
+    private String getUrl(String thumbnail) {
+        return Constants.BASE_URL_IMAGE +
+                context.getResources().getString(R.string.image_size) +
+                thumbnail;
     }
 }
 
