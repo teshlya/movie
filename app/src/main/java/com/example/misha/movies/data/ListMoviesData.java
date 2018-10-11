@@ -1,10 +1,11 @@
-package data;
+package com.example.misha.movies.data;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
 public class ListMoviesData {
+
     @SerializedName("results")
     ArrayList<MovieData> movies;
 

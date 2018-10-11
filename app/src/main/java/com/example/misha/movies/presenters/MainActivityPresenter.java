@@ -2,11 +2,9 @@ package com.example.misha.movies.presenters;
 
 
 import com.example.misha.movies.fragment.BaseFragment;
-import com.example.misha.movies.fragment.MainFragment;
+import com.example.misha.movies.fragment.SearchMovieFragment;
 import com.example.misha.movies.mvp.FragmentNavigation;
 import com.example.misha.movies.mvp.MainActivityVP;
-
-import data.MovieData;
 
 public class MainActivityPresenter implements MainActivityVP.Presenter, FragmentNavigation.Presenter {
 
@@ -22,7 +20,7 @@ public class MainActivityPresenter implements MainActivityVP.Presenter, Fragment
     }
 
     @Override
-    public void getMainFragment() {
-            view.setMainFragment(new MainFragment());
+    public void getSearchMovieFragment() {
+        view.addSearchMovieFragment(new SearchMovieFragment());
     }
 }

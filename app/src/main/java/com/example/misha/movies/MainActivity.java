@@ -7,8 +7,6 @@ import com.example.misha.movies.fragment.BaseFragment;
 import com.example.misha.movies.mvp.MainActivityVP;
 import com.example.misha.movies.presenters.MainActivityPresenter;
 
-import data.MovieData;
-
 public class MainActivity extends AppCompatActivity implements MainActivityVP.View {
 
     private MainActivityPresenter presenter;
@@ -17,14 +15,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityVP.Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         presenter = new MainActivityPresenter(this);
-
-        presenter.getMainFragment();
+        presenter.getSearchMovieFragment();
     }
 
     @Override
-    public void setMainFragment(BaseFragment fragment) {
+    public void addSearchMovieFragment(BaseFragment fragment) {
         fragment.atachPresenter(presenter);
         getSupportFragmentManager()
                 .beginTransaction()

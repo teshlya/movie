@@ -1,10 +1,8 @@
 package com.example.misha.movies.fragment;
 
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,11 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.misha.movies.R;
+import com.example.misha.movies.adapter.LoadMoreListener;
 import com.example.misha.movies.adapter.MovieAdapter;
-import com.example.misha.movies.adapter.OnLoadMoreListener;
+import com.example.misha.movies.adapter.OnLoadMoreCallback;
 import com.example.misha.movies.model.MovieModel;
-import com.example.misha.movies.mvp.MainFragmentVP;
-import com.example.misha.movies.presenters.MainFragmentPresenter;
+import com.example.misha.movies.mvp.SearchMovieFragmentVP;
+import com.example.misha.movies.presenters.SearchMovieFragmentPresenter;
 
 import java.util.List;
 
@@ -31,10 +30,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import data.MovieData;
 
+import com.example.misha.movies.data.MovieData;
 
-public class MainFragment extends BaseFragment implements MainFragmentVP.View {
+public class SearchMovieFragment extends BaseFragment implements SearchMovieFragmentVP.View {
 
     @BindView(R.id.search_edit)
     EditText editTextSearch;
@@ -45,37 +44,51 @@ public class MainFragment extends BaseFragment implements MainFragmentVP.View {
     private Unbinder unbinder;
     private Context context;
     private ProgressDialog progressDialog;
-    private MainFragmentPresenter presenter;
+    private SearchMovieFragmentPresenter presenter;
     private MovieAdapter adapter;
-
+    private LoadMoreListener loadMoreListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        context = container.getContext();
+        View view = inflater.inflate(R.layout.fragment_search_movie, container, false);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        context = getContext();
         unbinder = ButterKnife.bind(this, view);
         init();
         return view;
     }
 
     private void init() {
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
+        initPresenter();
+        initRecyclerView();
+        setSearchActionKeyboard();
+    }
+
+    private void initPresenter() {
+        MovieModel movieModel = new MovieModel();
+        presenter = new SearchMovieFragmentPresenter(movieModel);
+        presenter.attachView(this);
+    }
+
+    private void initRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         adapter = new MovieAdapter(this.navigationPresenter, recyclerView);
         recyclerView.setAdapter(adapter);
-        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+        recyclerView.addOnScrollListener(initLoadMoreListener());
+    }
+
+    private LoadMoreListener initLoadMoreListener(){
+        loadMoreListener = new LoadMoreListener(new OnLoadMoreCallback() {
             @Override
             public void onLoadMore() {
                 presenter.loadMore();
             }
         });
-        MovieModel movieModel = new MovieModel();
-        presenter = new MainFragmentPresenter(movieModel);
-        presenter.attachView(this);
+        return loadMoreListener;
+    }
 
+    private void setSearchActionKeyboard() {
         editTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -95,13 +108,14 @@ public class MainFragment extends BaseFragment implements MainFragmentVP.View {
 
     private void search() {
         presenter.search();
-        hideKeyboard();
     }
 
-    private void hideKeyboard() {
-        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
+    @Override
+    public void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
+                .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     @Override
@@ -113,11 +127,13 @@ public class MainFragment extends BaseFragment implements MainFragmentVP.View {
     public void showMovies(List<MovieData> movies) {
         adapter.setData(movies);
         recyclerView.smoothScrollToPosition(0);
+        loadMoreListener.setLoaded();
     }
 
     @Override
     public void addMovies(List<MovieData> movies) {
         adapter.addData(movies);
+        loadMoreListener.setLoaded();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package data;
+package com.example.misha.movies.data;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,17 +1,16 @@
 package com.example.misha.movies.mvp;
 
 
-import com.example.misha.movies.adapter.MovieAdapter;
-
 import java.util.List;
 
-import data.MovieData;
+import com.example.misha.movies.data.MovieData;
 
-public interface MainFragmentVP {
+public interface SearchMovieFragmentVP {
     interface View{
         String getSearchQuery();
         void showMovies(List<MovieData> movies);
         void addMovies(List<MovieData> movies);
+        void hideKeyboard();
         void showToast(int resId);
         void showProgress();
         void hideProgress();
@@ -20,6 +19,8 @@ public interface MainFragmentVP {
     }
 
     interface Presenter{
+        void attachView(SearchMovieFragmentVP.View view);
+        void detachView();
         void search();
         void loadMore();
     }

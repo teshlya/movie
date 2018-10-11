@@ -3,7 +3,7 @@ package com.example.misha.movies.api;
 
 import com.example.misha.movies.Constants;
 
-import data.ListMoviesData;
+import com.example.misha.movies.data.ListMoviesData;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

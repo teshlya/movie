@@ -3,17 +3,13 @@ package com.example.misha.movies.mvp;
 
 import com.example.misha.movies.fragment.BaseFragment;
 
-import data.MovieData;
-
 public interface MainActivityVP {
-    interface View{
-        void setMainFragment(BaseFragment fragment);
+    interface View {
+        void addSearchMovieFragment(BaseFragment fragment);
         void addDetailFragment(BaseFragment fragment);
     }
 
-    interface Presenter{
-
-        void getMainFragment();
-
+    interface Presenter {
+        void getSearchMovieFragment();
     }
 }
